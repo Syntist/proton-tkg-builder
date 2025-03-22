@@ -27,6 +27,10 @@ jobs:
           echo "-------patches-----"
           echo ${{ github.workspace }}
 
+          cd ${{ github.workspace }}
+
+          ls -la
+
       - name: Build Proton-TKG with Docker Compose
         working-directory: ${{ github.workspace }}
         run: docker-compose up --build
