@@ -30,7 +30,7 @@ jobs:
       - name: Save build artifacts (if needed)
         run: |
           mkdir -p artifacts
-          docker cp proton-tkg-container:/path/to/output artifacts/
+          cp build/wine-tkg-git/proton-tkg/built/*  artifacts/
         if: success()
 
       - name: Upload built Proton-TKG as an artifact
