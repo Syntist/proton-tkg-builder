@@ -1,0 +1,32 @@
+diff --git a/dlls/win32u/d3dkmt.c b/dlls/win32u/d3dkmt.c
+index a6ec70d5ac4..09ccb5423bb 100644
+--- a/dlls/win32u/d3dkmt.c
++++ b/dlls/win32u/d3dkmt.c
+@@ -29,6 +29,7 @@
+ #include "ntgdi_private.h"
+ #include "win32u_private.h"
+ #include "ntuser_private.h"
++#include "d3dkmdt.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(vulkan);
+ 
+@@ -360,6 +361,19 @@ NTSTATUS WINAPI NtGdiDdDDIQueryAdapterInfo( D3DKMT_QUERYADAPTERINFO *desc )
+         *value = KMT_DRIVERVERSION_WDDM_1_3;
+         return STATUS_SUCCESS;
+     }
++    case KMTQAITYPE_WDDM_2_7_CAPS:
++    {
++        const char *e = getenv( "WINE_DISABLE_HARDWARE_SCHEDULING" );
++        D3DKMT_WDDM_2_7_CAPS *value = desc->pPrivateDriverData;
++
++        if (desc->PrivateDriverDataSize < sizeof(*value))
++            return STATUS_INVALID_PARAMETER;
++
++        value->HwSchSupported = 1;
++        value->HwSchEnabled = (!e || *e == '\0' || *e == '0') ? 1 : 0;
++        value->HwSchEnabledByDefault = value->HwSchEnabled;
++        return STATUS_SUCCESS;
++    }
+     default:
+     {
+         FIXME( "type %d not handled.\n", desc->Type );
