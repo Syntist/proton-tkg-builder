@@ -36,6 +36,9 @@ services:
           ls && \
 
           ls / && \
+          ls /patches && \
+
+
           cp /patches/* ../wine-tkg-git/wine-tkg-userpatches && \
           touch tarplz && \
           yes|./proton-tkg.sh"
