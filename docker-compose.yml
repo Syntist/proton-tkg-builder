@@ -30,12 +30,9 @@ services:
           sed -i 's/_proton_branch=\"experimental_8.0\"/_proton_branch=\"experimental_9.0\"/' advanced-customization.cfg && \
           sed -i 's/_sdl_joy_support=\"false\"/_sdl_joy_support=\"true\"/' advanced-customization.cfg && \
 
-
-          git clone https://github.com/Syntist/proton-tkg-builder.git
-
-          cp proton-tkg-builder/patches/* /proton-tkg/wine-tkg-git/wine-tkg-git/wine-tkg-userpatches && \
-
           cd .. && \
+
+          cp patches/* ../wine-tkg-git/wine-tkg-git/wine-tkg-userpatches && \
           touch tarplz && \
           yes|./proton-tkg.sh"
 

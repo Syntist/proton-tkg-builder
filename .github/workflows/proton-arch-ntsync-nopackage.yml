@@ -11,34 +11,69 @@ on:
   workflow_dispatch:  # Allows manual triggering
 
 jobs:
-  build-proton-tkg:
+  build:
     runs-on: ubuntu-latest
     container: archlinux:latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Docker
-        run: pacman -Syu --noconfirm && pacman -S --noconfirm docker docker-compose
-
-      - name: Files
-        run: | 
-          ls && ls patches
-          pwd
-
-      - name: Build Proton-TKG with Docker Compose
-        working-directory: ${{ github.workspace }}
-        run: docker-compose up --build
-
-      - name: Save build artifacts (if needed)
+      - name: Install System Dependencies
         run: |
-          mkdir -p artifacts
-          cp build/wine-tkg-git/proton-tkg/built/*  artifacts/
-        if: success()
+          echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+          pacman -Syu --noconfirm base-devel sudo lib32-jack2 git vulkan-headers
+      - name: Create User
+        run: |
+          useradd -m -G wheel -s /bin/bash user
+          echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+      - name: Build and Install ntsync-header from PKGBUILD
+        run: |
+          sudo -u user bash -c "
+            cd ~
+            git clone https://aur.archlinux.org/ntsync.git
+            cd ntsync
+            makepkg -si --noconfirm
+          "
 
-      - name: Upload built Proton-TKG as an artifact
+      - name: Clone Proton-TKG
+        run: |
+          git clone https://github.com/Frogging-Family/wine-tkg-git.git
+          cp patches/* wine-tkg-git/wine-tkg-git/wine-tkg-userpatches
+
+          ls -la wine-tkg-git/wine-tkg-git/wine-tkg-userpatches
+
+      - name: Compile Proton-TKG
+        run: |
+          cd wine-tkg-git
+
+          chown user -R ..
+          chown user -R /tmp
+          export CARGO_HOME="$PWD"
+
+          cd proton-tkg
+          
+          sed -i 's/uninstaller=\"false\"/uninstaller=\"true\"/' proton-tkg.cfg  
+          sed -i 's/autoinstall=\"false\"/autoinstall=\"true\"/' proton-tkg.cfg  
+          sed -i 's/LOCAL_PRESET=\"\"/LOCAL_PRESET=\"none\"/' proton-tkg.cfg  
+          sed -i 's/_build_gstreamer=\"false\"/_build_gstreamer=\"true\"/' proton-tkg.cfg  
+          sed -i 's/lib32_gstreamer=\"false\"/lib32_gstreamer=\"true\"/' proton-tkg.cfg  
+          sed -i 's/wayland_driver=\"false\"/wayland_driver=\"true\"/' proton-tkg.cfg  
+          sed -i 's/_use_ntsync=\"false\"/_use_ntsync=\"true\"/' proton-tkg.cfg  
+          sed -i 's/_use_esync=\"true\"/_use_esync=\"false\"/' proton-tkg.cfg  
+          sed -i 's/_use_fsync=\"true\"/_use_fsync=\"false\"/' proton-tkg.cfg  
+          sed -i 's/_user_patches_no_confirm=\"false\"/_user_patches_no_confirm=\"true\"/' proton-tkg.cfg  
+
+          cd proton-tkg-profiles  
+          sed -i 's/_proton_branch=\"experimental_8.0\"/_proton_branch=\"experimental_9.0\"/' advanced-customization.cfg  
+          sed -i 's/_sdl_joy_support=\"false\"/_sdl_joy_support=\"true\"/' advanced-customization.cfg  
+
+
+          touch tarplz
+          yes | ./proton-tkg.sh
+          "
+      - name: Archive Build Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: proton-tkg-build
-          path: artifacts/
+          path: proton-tkg/built/*.tar
