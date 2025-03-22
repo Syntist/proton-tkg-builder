@@ -21,7 +21,7 @@ jobs:
 
       - name: Files
         run: | 
-          ls
+          ls && ls patches
 
       - name: Build Proton-TKG with Docker Compose
         run: | 
