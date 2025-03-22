@@ -32,6 +32,10 @@ services:
           sed -i 's/_sdl_joy_support=\"false\"/_sdl_joy_support=\"true\"/' advanced-customization.cfg && \
 
           cd .. && \
+          pwd && \
+          ls && \
+
+          ls / && \
           cp /patches/* ../wine-tkg-git/wine-tkg-userpatches && \
           touch tarplz && \
           yes|./proton-tkg.sh"
