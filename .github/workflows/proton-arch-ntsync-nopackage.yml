@@ -3,7 +3,7 @@ name: Build Proton-TKG with Docker Compose
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
   workflow_dispatch:  # Allows manual triggering
 
