@@ -72,7 +72,9 @@ jobs:
 
       - name: Compile Proton-TKG
         run: |
+          ls -la
           cd ..
+          ls -la
           touch tarplz
           yes | ./proton-tkg.sh
 
