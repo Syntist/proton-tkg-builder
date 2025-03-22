@@ -36,7 +36,8 @@ services:
           ls && \
 
           ls / && \
-          ls /patches && \
+          ls /patches/* && \
+
 
           cp /patches/* /proton-tkg/wine-tkg-git/wine-tkg-git/wine-tkg-userpatches && \
 
