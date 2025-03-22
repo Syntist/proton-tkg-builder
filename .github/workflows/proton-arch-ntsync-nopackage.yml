@@ -17,15 +17,14 @@ jobs:
 
       - name: Docker Compose Action
         uses: hoverkraft-tech/compose-action@v2.2.0
+        with:
+          compose-file: "./docker-compose.yml"
 
-      - name: Build Proton-TKG with Docker Compose
-        run: docker-compose up --build
+      # - name: Monitor the build logs (optional)
+      #   run: docker-compose logs -f
 
-      - name: Monitor the build logs (optional)
-        run: docker-compose logs -f
-
-      - name: Stop and clean up containers
-        run: docker-compose down
+      # - name: Stop and clean up containers
+      #   run: docker-compose down
 
       - name: Save build artifacts (if needed)
         run: |
