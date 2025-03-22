@@ -3,8 +3,8 @@ services:
     build: ./
     container_name: proton-tkg-builder
     volumes:
-      - build:/proton-tkg:rw
-      - ./patches:/patches:rw
+      - ./build:/proton-tkg
+      - ./patches:/patches
     working_dir: /proton-tkg
     stdin_open: true
     tty: true
