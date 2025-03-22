@@ -3,12 +3,14 @@ services:
     build: ./
     container_name: proton-tkg-builder
     volumes:
-      - ./build:/proton-tkg
-      - ./patches:/patches
+      - ./build:/proton-tkg:rw
+      - ./patches:/patches:rw
     working_dir: /proton-tkg
     stdin_open: true
     tty: true
     command: bash -c "
+          ls /patches && echo "-------patches-----" && \
+
           paru -Syu --noconfirm && \
           export CARGO_HOME="$PWD" && \
           rm -rf * && \
@@ -31,16 +33,9 @@ services:
           sed -i 's/_proton_branch=\"experimental_8.0\"/_proton_branch=\"experimental_9.0\"/' advanced-customization.cfg && \
           sed -i 's/_sdl_joy_support=\"false\"/_sdl_joy_support=\"true\"/' advanced-customization.cfg && \
 
-          cd .. && \
-          pwd && \
-          ls && \
-
-          ls / && \
-          ls /patches/* && \
-
-
           cp /patches/* /proton-tkg/wine-tkg-git/wine-tkg-git/wine-tkg-userpatches && \
 
+          cd .. && \
           touch tarplz && \
           yes|./proton-tkg.sh"
 
