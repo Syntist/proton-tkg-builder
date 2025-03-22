@@ -9,17 +9,15 @@ on:
 
 jobs:
   build-proton-tkg:
-    runs-on: ubuntu-latest  # GitHub Actions runner with Docker pre-installed
+    runs-on: ubuntu-latest
+    container: archlinux:latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx (optional for better caching)
-        uses: docker/setup-buildx-action@v3
-
-      - name: Set up Docker Compose
-        run: apt-get update && apt-get install -y docker-compose
+      - name: Set up Docker
+        run: pacman -Syu --noconfirm && pacman -S --noconfirm docker docker-compose
 
       - name: Build Proton-TKG with Docker Compose
         run: docker-compose up --build
