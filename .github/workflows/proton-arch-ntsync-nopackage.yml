@@ -72,9 +72,7 @@ jobs:
 
       - name: Compile Proton-TKG
         run: |
-          ls -la
-          cd ..
-          ls -la
+          cd wine-tkg-git/proton-tkg
           touch tarplz
           yes | ./proton-tkg.sh
 
