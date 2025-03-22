@@ -36,7 +36,7 @@ jobs:
             makepkg -si --noconfirm
           "
 
-      - name: Compile Proton-TKG
+      - name: Clone Proton-TKG and Apply patches
         run: |
           git clone https://github.com/Frogging-Family/wine-tkg-git.git
           cp patches/* wine-tkg-git/wine-tkg-git/wine-tkg-userpatches
@@ -59,13 +59,23 @@ jobs:
           sed -i 's/_use_fsync=\"true\"/_use_fsync=\"false\"/' proton-tkg.cfg  
           sed -i 's/_user_patches_no_confirm=\"false\"/_user_patches_no_confirm=\"true\"/' proton-tkg.cfg  
 
+          echo "cat proton-tkg.cfg"
+          cat proton-tkg.cfg
+
           cd proton-tkg-profiles  
           sed -i 's/_proton_branch=\"experimental_8.0\"/_proton_branch=\"experimental_9.0\"/' advanced-customization.cfg  
           sed -i 's/_sdl_joy_support=\"false\"/_sdl_joy_support=\"true\"/' advanced-customization.cfg  
 
+          echo "cat advanced-customization.cfg"
+          cat advanced-customization.cfg
+        
+
+      - name: Compile Proton-TKG
+        run: |
+          cd ..
           touch tarplz
           yes | ./proton-tkg.sh
-          "
+
       - name: Archive Build Artifacts
         uses: actions/upload-artifact@v4
         with:
