@@ -36,21 +36,16 @@ jobs:
             makepkg -si --noconfirm
           "
 
-      - name: Clone Proton-TKG
+      - name: Compile Proton-TKG
         run: |
           git clone https://github.com/Frogging-Family/wine-tkg-git.git
           cp patches/* wine-tkg-git/wine-tkg-git/wine-tkg-userpatches
-
           ls -la wine-tkg-git/wine-tkg-git/wine-tkg-userpatches
-
-      - name: Compile Proton-TKG
-        run: |
           cd wine-tkg-git
 
           chown user -R ..
           chown user -R /tmp
           export CARGO_HOME="$PWD"
-
           cd proton-tkg
           
           sed -i 's/uninstaller=\"false\"/uninstaller=\"true\"/' proton-tkg.cfg  
@@ -67,7 +62,6 @@ jobs:
           cd proton-tkg-profiles  
           sed -i 's/_proton_branch=\"experimental_8.0\"/_proton_branch=\"experimental_9.0\"/' advanced-customization.cfg  
           sed -i 's/_sdl_joy_support=\"false\"/_sdl_joy_support=\"true\"/' advanced-customization.cfg  
-
 
           touch tarplz
           yes | ./proton-tkg.sh
