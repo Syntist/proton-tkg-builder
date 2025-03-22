@@ -20,7 +20,10 @@ jobs:
         run: pacman -Syu --noconfirm && pacman -S --noconfirm docker docker-compose
 
       - name: Build Proton-TKG with Docker Compose
-        run: docker-compose up --build
+        run: | 
+          echo "Show Files"
+          ls
+          docker-compose up --build
 
       - name: Save build artifacts (if needed)
         run: |
