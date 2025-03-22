@@ -17,11 +17,14 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Docker
-        run: pacman -Syu --noconfirm && pacman -S --noconfirm docker docker-compose && ls / && ls /patches/*
+        run: pacman -Syu --noconfirm && pacman -S --noconfirm docker docker-compose
+
+      - name: Files
+        run: | 
+          ls
 
       - name: Build Proton-TKG with Docker Compose
         run: | 
-          echo "Show Files"
           docker-compose up --build
 
       - name: Save build artifacts (if needed)
