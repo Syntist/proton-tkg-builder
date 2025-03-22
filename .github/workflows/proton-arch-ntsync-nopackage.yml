@@ -24,8 +24,8 @@ jobs:
           ls && ls patches
 
       - name: Build Proton-TKG with Docker Compose
-        run: | 
-          docker-compose up --build
+        working-directory: ${{ github.workspace }}
+        run: docker-compose up --build
 
       - name: Save build artifacts (if needed)
         run: |

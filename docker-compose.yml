@@ -3,11 +3,14 @@ services:
     build: ./
     container_name: proton-tkg-builder
     volumes:
-      - ./build:/proton-tkg
+      - ./build:/proton-tkg:rw
+      - ./patches:/patches:rw
     working_dir: /proton-tkg
     stdin_open: true
     tty: true
     command: bash -c "
+          ls /patches && echo "-------patches-----" && \
+
           paru -Syu --noconfirm && \
           export CARGO_HOME="$PWD" && \
           rm -rf * && \
@@ -33,7 +36,8 @@ services:
 
           git clone https://github.com/Syntist/proton-tkg-builder.git
 
-          cp proton-tkg-builder/patches/* /proton-tkg/wine-tkg-git/wine-tkg-git/wine-tkg-userpatches && \
+
+          cp /patches/* /proton-tkg/wine-tkg-git/wine-tkg-git/wine-tkg-userpatches && \
 
           cd .. && \
           touch tarplz && \
