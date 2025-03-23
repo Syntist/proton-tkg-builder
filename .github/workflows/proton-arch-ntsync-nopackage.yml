@@ -1,14 +1,9 @@
-name: Build Proton-TKG with Docker Compose
+name: Build Proton-TKG with NTSync + Wayland + GStreamer + SDL2 Joystick Support
 
 on:
-  push:
-    branches:
-      - master
-
   schedule:
-    - cron: '0 4 * * *'
-
-  workflow_dispatch:  # Allows manual triggering
+    - cron:  '25 9,21 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -68,7 +63,6 @@ jobs:
 
           echo "cat advanced-customization.cfg"
           cat advanced-customization.cfg
-        
 
       - name: Compile Proton-TKG
         run: |
