@@ -23,7 +23,7 @@ index a6ec70d5ac4..09ccb5423bb 100644
 +            return STATUS_INVALID_PARAMETER;
 +
 +        value->HwSchSupported = 1;
-+        value->HwSchEnabled = (!e || *e == '\0' || *e == '0') ? 1 : 0;
++        value->HwSchEnabled = (!e || *e == '\0' || *e == '0') ? 0 : 1;
 +        value->HwSchEnabledByDefault = value->HwSchEnabled;
 +        return STATUS_SUCCESS;
 +    }
