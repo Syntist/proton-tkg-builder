@@ -4,6 +4,7 @@ services:
     container_name: proton-tkg-builder-2
     volumes:
       - ./build:/proton-tkg:rw
+      - ./patches:/patches:rw
     working_dir: /proton-tkg
     stdin_open: true
     tty: true
@@ -29,10 +30,16 @@ services:
           cd proton-tkg-profiles && \
           sed -i 's/_proton_branch=\"experimental_8.0\"/_proton_branch=\"experimental_9.0\"/' advanced-customization.cfg && \
           sed -i 's/_sdl_joy_support=\"false\"/_sdl_joy_support=\"true\"/' advanced-customization.cfg && \
+          sed -i '/_GCC_FLAGS=/ s|\"$| -DNDEBUG\"|' advanced-customization.cfg && \
+
+          grep '_GCC_FLAGS=' advanced-customization.cfg && \
 
           cd .. && \
 
-          cp patches/* ../wine-tkg-git/wine-tkg-git/wine-tkg-userpatches && \
+          cp /patches/* /proton-tkg/wine-tkg-git/wine-tkg-git/wine-tkg-userpatches && \
+
+          ls -a /proton-tkg/wine-tkg-git/wine-tkg-git/wine-tkg-userpatches && \
+
           touch tarplz && \
           yes|./proton-tkg.sh"
 

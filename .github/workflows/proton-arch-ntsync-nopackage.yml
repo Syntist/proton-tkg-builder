@@ -60,8 +60,11 @@ jobs:
           cd proton-tkg-profiles  
           sed -i 's/_proton_branch=\"experimental_8.0\"/_proton_branch=\"experimental_9.0\"/' advanced-customization.cfg  
           sed -i 's/_sdl_joy_support=\"false\"/_sdl_joy_support=\"true\"/' advanced-customization.cfg  
+          sed -i '/_GCC_FLAGS=/ s|\"$| -DNDEBUG\"|' advanced-customization.cfg && \ 
 
-          echo "cat advanced-customization.cfg"
+          grep '_GCC_FLAGS=' advanced-customization.cfg
+
+          echo "=========================="
           cat advanced-customization.cfg
 
       - name: Compile Proton-TKG
