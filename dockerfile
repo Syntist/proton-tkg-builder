@@ -1,4 +1,4 @@
-FROM ticpu/archlinux-paru
+FROM archlinux:latest
 
 USER root
 
