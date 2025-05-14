@@ -17,19 +17,7 @@ jobs:
       - name: Install System Dependencies
         run: |
           echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
-          pacman -Syu --noconfirm base-devel sudo lib32-jack2 git vulkan-headers
-      - name: Create User
-        run: |
-          useradd -m -G wheel -s /bin/bash user
-          echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-      - name: Build and Install ntsync-header from PKGBUILD
-        run: |
-          sudo -u user bash -c "
-            cd ~
-            git clone https://aur.archlinux.org/ntsync.git
-            cd ntsync
-            makepkg -si --noconfirm
-          "
+          pacman -Syu --noconfirm base-devel sudo lib32-jack2 git vulkan-headers linux-api-headers
 
       - name: Clone Proton-TKG and Apply patches
         run: |
@@ -58,7 +46,7 @@ jobs:
           cat proton-tkg.cfg
 
           cd proton-tkg-profiles  
-          sed -i 's/_proton_branch=\"experimental_8.0\"/_proton_branch=\"experimental_9.0\"/' advanced-customization.cfg  
+          sed -i 's/_proton_branch=\"experimental_8.0\"/_proton_branch=\"experimental_10.0\"/' advanced-customization.cfg  
           sed -i 's/_sdl_joy_support=\"false\"/_sdl_joy_support=\"true\"/' advanced-customization.cfg  
           sed -i '/_GCC_FLAGS=/ s|\"$| -DNDEBUG\"|' advanced-customization.cfg 
 
