@@ -19,6 +19,11 @@ jobs:
           echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
           pacman -Syu --noconfirm base-devel sudo lib32-jack2 git vulkan-headers linux-api-headers
 
+      - name: Create User
+        run: |
+          useradd -m -G wheel -s /bin/bash user
+          echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
       - name: Clone Proton-TKG and Apply patches
         run: |
           git clone https://github.com/Frogging-Family/wine-tkg-git.git
