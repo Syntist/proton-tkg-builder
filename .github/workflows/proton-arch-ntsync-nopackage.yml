@@ -41,8 +41,8 @@ jobs:
           sed -i 's/autoinstall="false"/autoinstall="true"/' proton-tkg.cfg
           sed -i 's/LOCAL_PRESET=""/LOCAL_PRESET="none"/' proton-tkg.cfg 
 
-          echo "cat proton-tkg.cfg"
-          cat proton-tkg.cfg
+          echo "cat proton-tkg.sh"
+          cat proton-tkg.sh
 
       - name: Compile Proton-TKG
         run: |
