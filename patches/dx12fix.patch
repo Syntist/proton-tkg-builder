@@ -1,0 +1,35 @@
+From ef6e63b8b1a40c1fbbf1891ef8c8ea8abd24870f Mon Sep 17 00:00:00 2001
+From: Peter Jung <admin@ptr1337.dev>
+Date: Mon, 26 Jan 2026 15:41:03 +0100
+Subject: [PATCH] nvidia-dx12
+
+Signed-off-by: Peter Jung <admin@ptr1337.dev>
+---
+ proton-tkg/proton-tkg.sh | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/proton-tkg/proton-tkg.sh b/proton-tkg/proton-tkg.sh
+index 6991ada4..b6774f69 100755
+--- a/proton-tkg/proton-tkg.sh
++++ b/proton-tkg/proton-tkg.sh
+@@ -350,7 +350,8 @@ function build_vkd3d {
+   cd vkd3d-proton
+   git reset --hard HEAD
+   git clean -xdf
+-  git pull origin master
++  git checkout descriptor-heap-test || git checkout -b descriptor-heap-test origin/descriptor-heap-test
++  git pull origin descriptor-heap-test
+   git submodule update --init --recursive
+ 
+   if [ "$_bump_dxil_spirv" = "true" ]; then
+@@ -390,6 +391,8 @@ function build_dxvk {
+   git clean -xdf
+   git pull origin master
+ 
++  sed -i 's/DXVK_BRANCH=master/DXVK_BRANCH=descriptor-heap/g' updxvk.cfg
++
+   if [ -e "$_nowhere"/proton-tkg-userpatches/*.mydxvk* ]; then
+     cp "$_nowhere"/proton-tkg-userpatches/*.mydxvk* DXVKBUILD/patches/
+   fi
+-- 
+2.52.0

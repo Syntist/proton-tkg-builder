@@ -1,4 +1,4 @@
-name: Build Proton-TKG with NTSync + Wayland + GStreamer + SDL2 Joystick Support
+name: Build Proton-TKG with dx12fix Patch
 
 on:
   schedule:
@@ -27,37 +27,22 @@ jobs:
       - name: Clone Proton-TKG and Apply patches
         run: |
           git clone https://github.com/Frogging-Family/wine-tkg-git.git
-          cp patches/* wine-tkg-git/wine-tkg-git/wine-tkg-userpatches
-          ls -la wine-tkg-git/wine-tkg-git/wine-tkg-userpatches
+          cp patches/dx12fix.patch wine-tkg-git
+
           cd wine-tkg-git
+          git am dx12fix.patch
 
           chown user -R ..
           chown user -R /tmp
           export CARGO_HOME="$PWD"
           cd proton-tkg
           
-          sed -i 's/uninstaller=\"false\"/uninstaller=\"true\"/' proton-tkg.cfg  
-          sed -i 's/autoinstall=\"false\"/autoinstall=\"true\"/' proton-tkg.cfg  
-          sed -i 's/LOCAL_PRESET=\"\"/LOCAL_PRESET=\"none\"/' proton-tkg.cfg  
-          sed -i 's/_build_gstreamer=\"false\"/_build_gstreamer=\"true\"/' proton-tkg.cfg  
-          sed -i 's/lib32_gstreamer=\"false\"/lib32_gstreamer=\"true\"/' proton-tkg.cfg  
-          sed -i 's/wayland_driver=\"false\"/wayland_driver=\"true\"/' proton-tkg.cfg  
-          sed -i 's/_use_ntsync=\"false\"/_use_ntsync=\"true\"/' proton-tkg.cfg  
-          sed -i 's/_use_esync=\"true\"/_use_esync=\"false\"/' proton-tkg.cfg  
-          sed -i 's/_use_fsync=\"true\"/_use_fsync=\"false\"/' proton-tkg.cfg  
-          sed -i 's/_user_patches_no_confirm=\"false\"/_user_patches_no_confirm=\"true\"/' proton-tkg.cfg  
+          sed -i 's/uninstaller="false"/uninstaller="true"/' proton-tkg.cfg
+          sed -i 's/autoinstall="false"/autoinstall="true"/' proton-tkg.cfg
+          sed -i 's/LOCAL_PRESET=""/LOCAL_PRESET="none"/' proton-tkg.cfg 
 
           echo "cat proton-tkg.cfg"
           cat proton-tkg.cfg
-
-          cd proton-tkg-profiles  
-          sed -i 's/_proton_branch=\"experimental_8.0\"/_proton_branch=\"experimental_10.0\"/' advanced-customization.cfg  
-          sed -i 's/_sdl_joy_support=\"false\"/_sdl_joy_support=\"true\"/' advanced-customization.cfg  
-
-          grep '_GCC_FLAGS=' advanced-customization.cfg
-
-          echo "=========================="
-          cat advanced-customization.cfg
 
       - name: Compile Proton-TKG
         run: |
