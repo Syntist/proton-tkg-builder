@@ -30,7 +30,7 @@ jobs:
           cp patches/dx12fix.patch wine-tkg-git
 
           cd wine-tkg-git
-          git am dx12fix.patch
+          git apply dx12fix.patch
 
           chown user -R ..
           chown user -R /tmp
