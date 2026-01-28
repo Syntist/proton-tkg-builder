@@ -17,7 +17,11 @@ jobs:
       - name: Install System Dependencies
         run: |
           echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
-          pacman -Syu --noconfirm base-devel sudo lib32-jack2 git vulkan-headers linux-api-headers podman podman-compose
+          pacman -Syu --noconfirm base-devel sudo lib32-jack2 git vulkan-headers linux-api-headers docker docker-compose
+
+      - name: Start Docker Service
+        run: |
+          systemctl start docker
 
       - name: Create User
         run: |
