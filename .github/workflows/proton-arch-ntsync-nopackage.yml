@@ -22,6 +22,7 @@ jobs:
       - name: Start Docker Service
         run: |
           systemctl start docker
+          systemctl status docker
 
       - name: Create User
         run: |
